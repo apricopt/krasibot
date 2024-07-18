@@ -114,7 +114,7 @@ async function grabData() {
     }
 
     let dataTobeLogged = data.map(el => {
-      return {AdName: data.name, status : "✅"}
+      return {AdName: el.name, status : "✅"}
     })
 
     
@@ -134,7 +134,7 @@ function ExecutionManager() {
   let currentTime = new Date();
   const currentHour = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
-  if(currentHour < 7 || currentHour >= 21) {
+  if(currentHour < configuration.startingTimeOfDay || currentHour >= configuration.endingTimeOfDay) {
     console.log(`🕰️ Current hour is ${currentHour} so won't do anything 😺 `)
     return null
   }else {
