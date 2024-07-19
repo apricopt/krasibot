@@ -7,6 +7,14 @@ const {sleep, getRandomNumberInRange} = require("./utils")
 
 const {configuration} = require("./config")
 
+process.on('uncaughtException', (err) => {
+  // return null
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+// return null
+});
+
 async function launchBrowser(url) {
     let args = ["--no-sandbox"];
   
@@ -22,7 +30,7 @@ async function launchBrowser(url) {
           width: 1200,
           height: 800,
         },
-        executablePath: process.env.CHROMIUM_PATH,
+        // executablePath: process.env.CHROMIUM_PATH,
       });
     } catch (err) {
       console.log("Launching Err", err.message);
@@ -126,6 +134,7 @@ async function grabData() {
 
     console.log("Bye bye 👻")
     await browser.close();
+    return null
 
   }
 
@@ -134,25 +143,35 @@ function ExecutionManager() {
   let currentTime = new Date();
   const currentHour = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
+  const currentSeconds = currentTime.getSeconds();
+  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - 60)
   if(currentHour < configuration.startingTimeOfDay || currentHour >= configuration.endingTimeOfDay) {
-    console.log(`🕰️ Current hour is ${currentHour} so won't do anything 😺 `)
-    return null
+    console.log(`=> Current hour is ${currentHour} so won't do anything `)
   }else {
-    console.log(`😺 Feels like right time to renew ads.... as its ${currentHour}:${currentMinutes} on clock `)
+    console.log(`=> Feels like right time to renew ads.... as its ${currentHour}:${currentMinutes}:${currentSeconds} on clock `)
+    
+    console.log(`=> Delaying for ${delay} minutes.. Please hold.`)
+  
+    setTimeout(() => {
+      grabData();
+      // console.log("GRABIIIIIIIIIIIIIIIING DATA DOING ALLL STUFFF")
+    }, delay*60*1000);
+
+    // setTimeout(() => {
+    //   grabData();
+    //   // console.log("GRABIIIIIIIIIIIIIIIING DATA DOING ALLL STUFFF")
+    // }, delay*1000);
   }
 
-  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - 60)
-
-  console.log(` 👻 Delaying for ${delay} minutes.. Please hold.`)
 
   setTimeout(() => {
-    grabData();
-  }, delay*1000);
+    ExecutionManager();
+  }, (60*60*1000) + (delay*60*1000) + (5*60*1000) )
+
+  //   setTimeout(() => {
+  //   ExecutionManager();
+  // }, (60*1000) + (delay*1000) + (5*1000) )
 
 }
 
 ExecutionManager();
-setInterval(() => {
-  ExecutionManager();
-
-}, 60*60*1000)
