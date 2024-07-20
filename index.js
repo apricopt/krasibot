@@ -144,7 +144,7 @@ function ExecutionManager() {
   const currentHour = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
   const currentSeconds = currentTime.getSeconds();
-  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - configuration.renewTimeRange[0])
+  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - 60)
   if(currentHour < configuration.startingTimeOfDay || currentHour >= configuration.endingTimeOfDay) {
     console.log(`=> Current hour is ${currentHour} so won't do anything `)
   }else {
