@@ -30,7 +30,7 @@ async function launchBrowser(url) {
           width: 1200,
           height: 800,
         },
-        // executablePath: process.env.CHROMIUM_PATH,
+        executablePath: process.env.CHROMIUM_PATH,
       });
     } catch (err) {
       console.log("Launching Err", err.message);
@@ -52,9 +52,9 @@ async function launchBrowser(url) {
   
       return { browser, page };
     } catch (err) {
-      console.log("FinalError ", err.message);
+      // console.log("FinalError ", err.message);
       await browser.close();
-      throw err;
+      // throw err;
     }
   }
 
@@ -144,7 +144,7 @@ function ExecutionManager() {
   const currentHour = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
   const currentSeconds = currentTime.getSeconds();
-  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - 60)
+  let delay = getRandomNumberInRange(configuration.renewTimeRange[0] - 60, configuration.renewTimeRange[1] - configuration.renewTimeRange[0])
   if(currentHour < configuration.startingTimeOfDay || currentHour >= configuration.endingTimeOfDay) {
     console.log(`=> Current hour is ${currentHour} so won't do anything `)
   }else {
@@ -154,13 +154,9 @@ function ExecutionManager() {
   
     setTimeout(() => {
       grabData();
-      // console.log("GRABIIIIIIIIIIIIIIIING DATA DOING ALLL STUFFF")
     }, delay*60*1000);
 
-    // setTimeout(() => {
-    //   grabData();
-    //   // console.log("GRABIIIIIIIIIIIIIIIING DATA DOING ALLL STUFFF")
-    // }, delay*1000);
+
   }
 
 
@@ -168,9 +164,6 @@ function ExecutionManager() {
     ExecutionManager();
   }, (60*60*1000) + (delay*60*1000) + (5*60*1000) )
 
-  //   setTimeout(() => {
-  //   ExecutionManager();
-  // }, (60*1000) + (delay*1000) + (5*1000) )
 
 }
 
